@@ -1,0 +1,216 @@
+:root {
+  --color-accent: oklch(65% 45% 300);  /* purple accent */
+}
+
+html {
+  accent-color: var(--color-accent);
+}
+
+/*Base Typography*/
+
+input,
+textarea,
+button {
+  font: inherit;
+}
+
+/*Base Layout*/
+
+body {
+  /* Set line height to 1.5 times the font size
+     and use the OS’s UI font as the website font */
+  font: 100%/1.5 system-ui;
+
+  /* Limit content width so lines don't get too long */
+  max-width: 100ch;
+
+  /* Center content horizontally */
+  margin-inline: auto;
+
+  /* Prevent text from touching viewport edges */
+  padding-inline: 1em;
+}
+
+/*Navigation*/
+
+nav {
+  display: flex;
+  margin-bottom: 1.5em;
+  border-bottom: 1px solid oklch(80% 3% 200); /* cool gray */
+}
+
+nav a {
+  flex: 1;
+  text-decoration: none;
+  color: inherit;
+  text-align: center;
+  padding: 0.5em;
+}
+
+nav a.current {
+  border-bottom: 0.4em solid oklch(80% 3% 200);
+  padding-bottom: 0.1em;
+}
+
+nav a:hover {
+  border-bottom: 0.4em solid var(--color-accent);
+  padding-bottom: 0.1em;
+  background-color: oklch(from var(--color-accent) 95% 5% h);
+}
+
+/*Contact Form*/
+
+form {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1em;
+}
+
+form label {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+}
+
+form button {
+  grid-column: 1 / -1;
+}
+
+/*Images*/
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Projects Grid */
+
+.projects {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+  gap: 1em;
+}
+
+/* Subgrid alignment */
+.projects article {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+}
+
+.projects h2 {
+  margin: 0;
+}
+
+/*Typography Hierarchy*/
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: 400%;
+}
+
+/* Resume part 5 of the lab */
+
+main {
+  display: grid;
+  gap: 2em;
+}
+
+/* Resume header */
+body > header {
+  text-align: center;
+  margin-bottom: 2em;
+}
+
+body > header h1 {
+  font-size: 250%;
+  margin-bottom: 0.2em;
+}
+
+body > header p {
+  margin: 0.2em 0;
+}
+
+body > header a {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+body > header a:hover {
+  text-decoration: underline;
+}
+
+/* Resume sections */
+main > section {
+  display: grid;
+  gap: 1.25em;
+  padding-bottom: 1.5em;
+  border-bottom: 1px solid oklch(85% 3% 200);
+}
+
+main > section:last-child {
+  border-bottom: none;
+}
+
+/* Section titles */
+main h2 {
+  font-size: 180%;
+  margin-bottom: 0.5em;
+  border-left: 0.4em solid var(--color-accent);
+  padding-left: 0.5em;
+}
+
+/* Resume entries */
+main article {
+  display: grid;
+  gap: 0.25em;
+  padding-left: 1em;
+  border-left: 2px solid oklch(85% 3% 200);
+}
+
+main h3 {
+  font-size: 115%;
+  font-weight: 600;
+}
+
+main time {
+  font-size: 90%;
+  color: oklch(55% 3% 200);
+}
+
+/* Lists */
+ul {
+  padding-left: 1.2em;
+  display: grid;
+  gap: 0.5em;
+}
+
+/* Skills highlight */
+section:last-of-type article {
+  background: oklch(97% 2% 300);
+  padding: 1em;
+  border-radius: 0.5em;
+  border: 1px solid oklch(90% 3% 300);
+}
+
+/*Resume Layout*/
+
+@media (min-width: 700px) {
+  main {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  main > section {
+    grid-column: span 2;
+  }
+
+  section:last-of-type {
+    grid-column: span 2;
+  }
+}
