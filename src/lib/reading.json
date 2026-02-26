@@ -1,0 +1,17 @@
+[
+  {
+    "title": "A Gentleman in Moscow",
+    "author": "Amor Towles",
+    "image": "/images/gentleman.jpg"
+  },
+  {
+    "title": "The Holy Bible",
+    "author": "God and Man",
+    "image": "/images/bible.jpeg"
+  },
+  {
+    "title": "Story of a Soul",
+    "author": "Thérèse of Lisieux",
+    "image": "/images/storyofsoul.jpg"
+  }
+]

@@ -6,7 +6,7 @@ html {
   accent-color: var(--color-accent);
 }
 
-/*Base Typography*/
+/* Base Typography */
 
 input,
 textarea,
@@ -14,29 +14,21 @@ button {
   font: inherit;
 }
 
-/*Base Layout*/
+/* Base Layout */
 
 body {
-  /* Set line height to 1.5 times the font size
-     and use the OS’s UI font as the website font */
   font: 100%/1.5 system-ui;
-
-  /* Limit content width so lines don't get too long */
   max-width: 100ch;
-
-  /* Center content horizontally */
   margin-inline: auto;
-
-  /* Prevent text from touching viewport edges */
   padding-inline: 1em;
 }
 
-/*Navigation*/
+/* Navigation */
 
 nav {
   display: flex;
   margin-bottom: 1.5em;
-  border-bottom: 1px solid oklch(80% 3% 200); /* cool gray */
+  border-bottom: 1px solid oklch(80% 3% 200);
 }
 
 nav a {
@@ -58,7 +50,7 @@ nav a:hover {
   background-color: oklch(from var(--color-accent) 95% 5% h);
 }
 
-/*Contact Form*/
+/* Contact Form */
 
 form {
   display: grid;
@@ -76,7 +68,7 @@ form button {
   grid-column: 1 / -1;
 }
 
-/*Images*/
+/* Global Images */
 
 img {
   max-width: 100%;
@@ -84,7 +76,7 @@ img {
   display: block;
 }
 
-/* Projects Grid */
+/* Projects Grid Layout (GLOBAL ONLY) */
 
 .projects {
   display: grid;
@@ -92,18 +84,7 @@ img {
   gap: 1em;
 }
 
-/* Subgrid alignment */
-.projects article {
-  display: grid;
-  grid-template-rows: subgrid;
-  grid-row: span 3;
-}
-
-.projects h2 {
-  margin: 0;
-}
-
-/*Typography Hierarchy*/
+/* Typography Hierarchy */
 
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.1;
@@ -114,7 +95,7 @@ h1 {
   font-size: 400%;
 }
 
-/* Resume part 5 of the lab */
+/* Resume Layout */
 
 main {
   display: grid;
@@ -185,6 +166,7 @@ main time {
 }
 
 /* Lists */
+
 ul {
   padding-left: 1.2em;
   display: grid;
@@ -192,6 +174,7 @@ ul {
 }
 
 /* Skills highlight */
+
 section:last-of-type article {
   background: oklch(97% 2% 300);
   padding: 1em;
@@ -199,7 +182,7 @@ section:last-of-type article {
   border: 1px solid oklch(90% 3% 300);
 }
 
-/*Resume Layout*/
+/* Resume Layout Responsive */
 
 @media (min-width: 700px) {
   main {
