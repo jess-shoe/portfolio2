@@ -1,10 +1,7 @@
-<nav>
-    <a href=".">Home</a>
-    <a href="projects">Projects</a>
-    <a href="contact">Contact</a>
-    <a class="current" href="resume">Resume</a>
-    <a href="https://github.com/jtshoe" target="_blank">GitHub</a>
-</nav>
+<svelte:head>
+  <title>Resume | Jessica Shoemaker</title>
+</svelte:head>
+
     <h1>Resume</h1>
     <header>
     <h1>Jessica Shoemaker</h1>

@@ -3,13 +3,9 @@
   import Project from "$lib/Project.svelte";
 </script>
 
-<nav>
-    <a href=".">Home</a>
-    <a class="current" href="projects">Projects</a>
-    <a href="contact">Contact</a>
-    <a href="resume">Resume</a>
-    <a href="https://github.com/jtshoe" target="_blank">GitHub</a>
-</nav>
+<svelte:head>
+  <title>Projects | Jessica Shoemaker</title>
+</svelte:head>
 
 <h1>Projects ({projects.length})</h1>
 

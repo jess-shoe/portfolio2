@@ -10,7 +10,7 @@
   <p>
     {#if data.link}
       {data.description}
-      <a href={data.link}>View project</a>
+      <a href={data.link} target="_blank">View project</a>
     {:else}
       {data.description}
     {/if}
@@ -23,9 +23,11 @@
     grid-template-rows: auto auto 1fr;
     gap: 0.75em;
     padding: 0.75em;
-    border: 1px solid oklch(85% 3% 200);
+
+    border: 1px solid color-mix(in oklch, CanvasText 15%, Canvas);
     border-radius: 0.5em;
-    background: oklch(98% 1% 300);
+
+    background: Canvas;
   }
 
   h2 {
@@ -34,6 +36,7 @@
   }
 
   img {
+    width: 100%;
     border-radius: 0.4em;
   }
 

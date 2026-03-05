@@ -1,10 +1,7 @@
-<nav>
-    <a href=".">Home</a>
-    <a href="projects">Projects</a>
-    <a class="current" href="contact">Contact</a>
-    <a href="resume">Resume</a>
-    <a href="https://github.com/jtshoe" target="_blank">GitHub</a>
-</nav>
+<svelte:head>
+  <title>Contact | Jessica Shoemaker</title>
+</svelte:head>
+
   <h1>Contact</h1>
   <form action="mailto:jessicatshoemaker@gmail.com" method="GET">
 
