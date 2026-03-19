@@ -83,6 +83,16 @@
           stroke-width="2"
         />
 
+        <!-- y-axis label -->
+        <text
+        x={-(innerHeight / 2)}
+        y={-margin.left + 20}
+        text-anchor="middle"
+        transform="rotate(-90)"
+        class="axis-label">
+        Programming Language
+        </text>
+
         <line
           x1={xScale(maxBar.value)}
           y1={yScale(maxBar.label) + yScale.bandwidth()/2}
