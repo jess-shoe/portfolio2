@@ -3,7 +3,10 @@
 </script>
 
 <article>
-  <h2>{data.title}</h2>
+  <header>
+    <h2>{data.title}</h2>
+    <span class="year">{data.year}</span>
+  </header>
 
   <img src={data.image} alt={data.title} />
 
@@ -30,9 +33,20 @@
     background: Canvas;
   }
 
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
   h2 {
     margin: 0;
     font-size: 120%;
+  }
+
+  .year {
+    font-size: 90%;
+    opacity: 0.7;
   }
 
   img {
