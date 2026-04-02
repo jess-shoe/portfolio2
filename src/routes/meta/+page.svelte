@@ -11,7 +11,7 @@
   let barData = [];
 
   let width = 900;
-  let height = 520;
+  let height = 420;
 
   let margin = { top: 30, right: 30, bottom: 50, left: 70 };
 

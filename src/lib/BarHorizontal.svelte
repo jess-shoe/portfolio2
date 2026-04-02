@@ -5,7 +5,7 @@
   export let title = '';
 
   let width = 600;
-  let height = 280;
+  let height = 240;
 
   let margin = { top: 35, right: 95, bottom: 55, left: 95 };
   let innerWidth = width - margin.left - margin.right;
