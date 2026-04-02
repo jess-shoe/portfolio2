@@ -2,19 +2,21 @@
   import * as d3 from 'd3';
 
   export let data = [];
+  export let title = '';
 
   let width = 600;
-  let height = 400;
+  let height = 280;
 
-  let margin = { top: 40, right: 150, bottom: 50, left: 100 };
-  let innerWidth  = width  - margin.left - margin.right;
-  let innerHeight = height - margin.top  - margin.bottom;
+  let margin = { top: 35, right: 95, bottom: 55, left: 95 };
+  let innerWidth = width - margin.left - margin.right;
+  let innerHeight = height - margin.top - margin.bottom;
 
   let xAxis, yAxis;
 
-  // scales
+  $: xMax = d3.max(data, d => d.value) || 1;
+
   $: xScale = d3.scaleLinear()
-    .domain([0, d3.max(data, d => d.value) || 1])
+    .domain([0, xMax])
     .range([0, innerWidth]);
 
   $: yScale = d3.scaleBand()
@@ -25,42 +27,41 @@
   $: colorScale = d3.scaleOrdinal(d3.schemeTableau10)
     .domain(data.map(d => d.label));
 
-  // axes
+  $: tickCount = Math.max(1, Math.min(10, xMax));
+
   $: if (xAxis && yAxis) {
-    d3.select(xAxis).call(d3.axisBottom(xScale));
+    d3.select(xAxis).call(
+      d3.axisBottom(xScale).ticks(tickCount).tickFormat(d3.format('d'))
+    );
 
     d3.select(yAxis).call(d3.axisLeft(yScale));
   }
 
-  // max bar
   $: maxBar = d3.greatest(data, d => d.value);
 </script>
 
 <div class="container">
-  <svg viewBox="0 0 {width} {height}">
-
-    <!-- title -->
+  <svg viewBox={`0 0 ${width} ${height}`}>
     <text
       x={margin.left + innerWidth / 2}
-      y={margin.top / 2}
+      y={20}
       text-anchor="middle"
-      class="chart-title">
-      Lines of Code per Language
+      class="chart-title"
+    >
+      {title}
     </text>
 
-    <!-- axes -->
     <g
-      transform="translate({margin.left}, {margin.top + innerHeight})"
+      transform={`translate(${margin.left}, ${margin.top + innerHeight})`}
       bind:this={xAxis}
     />
 
     <g
-      transform="translate({margin.left}, {margin.top})"
+      transform={`translate(${margin.left}, ${margin.top})`}
       bind:this={yAxis}
     />
 
-    <!-- bars -->
-    <g transform="translate({margin.left}, {margin.top})">
+    <g transform={`translate(${margin.left}, ${margin.top})`}>
       {#each data as d}
         <rect
           x={0}
@@ -71,7 +72,6 @@
         />
       {/each}
 
-      <!-- annotation -->
       {#if maxBar}
         <rect
           x={0}
@@ -83,48 +83,42 @@
           stroke-width="2"
         />
 
-        <!-- y-axis label -->
         <text
-        x={-(innerHeight / 2)}
-        y={-margin.left + 20}
-        text-anchor="middle"
-        transform="rotate(-90)"
-        class="axis-label">
-        Programming Language
+          x={-(innerHeight / 2)}
+          y={-60}
+          text-anchor="middle"
+          transform="rotate(-90)"
+          class="axis-label"
+        >
+          Programming
+          <tspan x={-(innerHeight / 2)} dy="1.2em">Language</tspan>
         </text>
 
-        <line
-          x1={xScale(maxBar.value)}
-          y1={yScale(maxBar.label) + yScale.bandwidth()/2}
-          x2={xScale(maxBar.value) + 40}
-          y2={yScale(maxBar.label) + yScale.bandwidth()/2}
-          stroke="black"
-        />
-
         <text
-          x={xScale(maxBar.value) + 45}
-          y={yScale(maxBar.label) + yScale.bandwidth()/2}
+          x={xScale(maxBar.value) + 12}
+          y={yScale(maxBar.label) + yScale.bandwidth() / 2}
           dominant-baseline="middle"
-          class="annotation">
+          text-anchor="start"
+          class="annotation"
+        >
           Most lines of code
         </text>
       {/if}
 
-      <!-- x label -->
       <text
         x={innerWidth / 2}
-        y={innerHeight + margin.bottom - 10}
+        y={innerHeight + 42}
         text-anchor="middle"
-        class="axis-label">
+        class="axis-label"
+      >
         Lines of Code
       </text>
     </g>
   </svg>
 
-  <!-- legend -->
   <ul class="legend">
     {#each data as d}
-      <li style="--color: {colorScale(d.label)}">
+      <li style={`--color: ${colorScale(d.label)}`}>
         <span class="swatch"></span>
         {d.label} <em>({d.value})</em>
       </li>
@@ -141,7 +135,9 @@
 
   .container {
     display: flex;
-    gap: 2rem;
+    gap: 1.25rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
   }
 
   .legend {
@@ -149,7 +145,8 @@
     padding: 0;
     margin: 0;
     display: grid;
-    gap: 0.5rem;
+    gap: 0.35rem;
+    font-size: 0.9rem;
   }
 
   li {
@@ -162,18 +159,20 @@
     width: 12px;
     height: 12px;
     background-color: var(--color);
+    flex: none;
   }
 
   .chart-title {
-    font-weight: bold;
+    font-weight: 700;
+    font-size: 0.95rem;
   }
 
   .axis-label {
-    font-size: 0.8em;
+    font-size: 0.72rem;
   }
 
   .annotation {
-    font-size: 0.7em;
+    font-size: 0.68rem;
     font-style: italic;
   }
 </style>
