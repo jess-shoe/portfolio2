@@ -4,11 +4,16 @@
   import * as d3 from 'd3';
   import { computePosition, autoPlacement, offset } from '@floating-ui/dom';
   import BarHorizontal from '$lib/BarHorizontal.svelte';
+  import LineChart from '$lib/LineChart.svelte';
 
   let locData = [];
   let commits = [];
   let clickedCommits = [];
+  let brushSelection = null;
+  let brushedCommits = [];
+  let selectedCommits = [];
   let barData = [];
+  let linesByDate = [];
 
   let width = 900;
   let height = 420;
@@ -24,6 +29,7 @@
   usableArea.width = usableArea.right - usableArea.left;
   usableArea.height = usableArea.bottom - usableArea.top;
 
+  let svg;
   let xAxis;
   let yAxis;
   let yAxisGridlines;
@@ -52,6 +58,40 @@
     .domain(d3.extent(commits, d => d.totalLines))
     .range([5, 30]);
 
+  function brushed(evt) {
+    brushSelection = evt.selection;
+  }
+
+  function isCommitBrushed(commit) {
+    if (!brushSelection) return false;
+
+    let [[x0, y0], [x1, y1]] = brushSelection;
+    let x = xScale(commit.datetime);
+    let y = yScale(commit.hourFrac);
+
+    return x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  }
+
+  $: brushedCommits = brushSelection ? commits.filter(isCommitBrushed) : [];
+
+  $: selectedCommits = Array.from(new Set([...clickedCommits, ...brushedCommits]));
+
+  $: selectedLines =
+    (selectedCommits.length > 0 ? selectedCommits : commits).flatMap(d => d.lines);
+
+  $: selectedCounts = d3.rollup(
+    selectedLines,
+    lines => lines.length,
+    d => d.type
+  );
+
+  $: allLanguages = Array.from(new Set(locData.map(d => d.type)));
+
+  $: barData = allLanguages.map(language => ({
+    label: language,
+    value: selectedCounts.get(language) ?? 0
+  }));
+
   $: {
     if (xAxis && yAxis && yAxisGridlines) {
       d3.select(xAxis).call(d3.axisBottom(xScale));
@@ -66,23 +106,39 @@
     }
   }
 
-  $: selectedLines =
-    clickedCommits.length > 0
-      ? clickedCommits.flatMap(commit => commit.lines)
-      : locData;
+  $: {
+    if (svg) {
+      d3.select(svg)
+        .call(
+          d3.brush()
+            .extent([[usableArea.left, usableArea.top], [usableArea.right, usableArea.bottom]])
+            .on('start brush end', brushed)
+        );
 
-  $: selectedCounts = d3.rollup(
-    selectedLines,
-    lines => lines.length,
-    d => d.type
-  );
+      d3.select(svg).selectAll('.dots, .overlay ~ *').raise();
+    }
+  }
 
-  $: allLanguages = Array.from(new Set(locData.map(d => d.type)));
+  $: {
+    let rolled = d3.rollups(
+      locData,
+      v => v.length,
+      d => d3.timeDay.floor(d.datetime)
+    ).map(([date, count]) => ({ date, count }));
 
-  $: barData = allLanguages.map(language => ({
-    label: language,
-    value: selectedCounts.get(language) ?? 0
-  }));
+    let dateExtent = d3.extent(rolled, d => d.date);
+
+    if (!dateExtent[0] || !dateExtent[1]) {
+      linesByDate = [];
+    } else {
+      let allDays = d3.timeDays(dateExtent[0], d3.timeDay.offset(dateExtent[1], 1));
+
+      linesByDate = allDays.map(date => ({
+        date,
+        count: rolled.find(d => +d.date === +date)?.count ?? 0
+      }));
+    }
+  }
 
   async function dotInteraction(index, evt) {
     let hoveredDot = evt.target;
@@ -148,7 +204,7 @@
   change the language breakdown of the site.
 </p>
 
-<svg viewBox={`0 0 ${width} ${height}`}>
+<svg bind:this={svg} viewBox={`0 0 ${width} ${height}`}>
   <g
     class="gridlines"
     transform={`translate(${usableArea.left}, 0)`}
@@ -166,14 +222,14 @@
   />
 
   <g class="dots">
-    {#each commits as commit, index}
+    {#each commits as commit, index (commit.id)}
       <circle
         cx={xScale(commit.datetime)}
         cy={yScale(commit.hourFrac)}
         r={rScale(commit.totalLines)}
         fill="steelblue"
         fill-opacity="0.7"
-        class:selected={clickedCommits.includes(commit)}
+        class:selected={selectedCommits.includes(commit)}
         on:mouseenter={evt => dotInteraction(index, evt)}
         on:mouseleave={evt => dotInteraction(index, evt)}
         on:click={evt => dotInteraction(index, evt)}
@@ -206,16 +262,20 @@
 
 <BarHorizontal
   data={barData}
-  title={clickedCommits.length > 0
-    ? 'Language Breakdown of Selected Commits'
+  title={selectedCommits.length > 0
+    ? `Language Breakdown: ${selectedCommits.length} Selected Commits`
     : 'Language Breakdown of Entire Website'}
 />
+
+<LineChart data={linesByDate} />
 
 <style>
   svg {
     max-width: 100%;
     height: auto;
     overflow: visible;
+    display: block;
+    margin-bottom: 1.5rem;
   }
 
   .gridlines {
@@ -268,5 +328,19 @@
   dl.info[hidden]:not(:hover, :focus-within) {
     opacity: 0;
     visibility: hidden;
+  }
+
+  @keyframes marching-ants {
+    to {
+      stroke-dashoffset: -8;
+    }
+  }
+
+  svg :global(.selection) {
+    fill-opacity: 0.1;
+    stroke: black;
+    stroke-opacity: 0.7;
+    stroke-dasharray: 5 3;
+    animation: marching-ants 2s linear infinite;
   }
 </style>
