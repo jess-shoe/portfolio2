@@ -10,20 +10,19 @@
 
   <img src={data.image} alt={data.title} />
 
-  <p>
-    {#if data.link}
-      {data.description}
-      <a href={data.link} target="_blank">View project</a>
-    {:else}
-      {data.description}
-    {/if}
-  </p>
+  <p>{data.description}</p>
+
+  {#if data.url}
+    <p class="project-link">
+      <a href={data.url} target="_blank" rel="noopener noreferrer">View project</a>
+    </p>
+  {/if}
 </article>
 
 <style>
   article {
     display: grid;
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto auto auto 1fr;
     gap: 0.75em;
     padding: 0.75em;
 
@@ -59,14 +58,13 @@
     font-size: 95%;
   }
 
-  a {
-    margin-left: 0.5em;
+  .project-link a {
     color: var(--color-accent);
     text-decoration: none;
     font-weight: 500;
   }
 
-  a:hover {
+  .project-link a:hover {
     text-decoration: underline;
   }
 </style>
