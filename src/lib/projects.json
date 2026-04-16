@@ -61,5 +61,13 @@
     "image": "images/project9.JPG",
     "description": "A life milestone launched in the Austrian Alps and followed by complex planning logistics.",
     "story": "This project began with an engagement in the breathtaking lakeside town of Hallstatt, Austria. The next phase involves designing and coordinating the many moving pieces of a wedding—effectively a large-scale event management challenge. The project is ongoing and combines strategic planning, collaboration, and excitement about the future."
+  },
+  {
+    "title": "BikeWatch",
+    "year": 2026,
+    "image": "images/BikeWatch.png",
+    "description": "An interactive map of BlueBike traffic across Boston and Cambridge, with time-based filtering and bike-access isochrones.",
+    "story": "This project combined Mapbox and D3 to visualize BlueBike station traffic across Boston and Cambridge. I built an interactive map with bike lane overlays, dynamically sized and colored station markers, a time-of-day filter, a legend, and clickable isochrones showing biking reachability from each station. The project strengthened my experience with geospatial visualization, reactive interfaces, and combining multiple web technologies into one polished interactive application.",
+    "url": "https://jess-shoe.github.io/bicycle/"
   }
 ]
